@@ -3,7 +3,7 @@ const TelegramBot = require('node-telegram-bot-api');
 const express = require('express');
 const bodyParser = require('body-parser');
 const TOKEN = '6143502881:AAEQmvcZkDavYqOjfvvjXl7tpWLskmI7OEc'
-const url = 'https://fine-plum-crab-ring.cyclic.app'
+const url = 'https://srbot.onrender.com'
 
 const port = process.env.PORT || 3000;
 
