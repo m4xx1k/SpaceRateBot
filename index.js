@@ -2,7 +2,7 @@
 const BOT_TOKEN = '6143502881:AAEQmvcZkDavYqOjfvvjXl7tpWLskmI7OEc'
 const URL = 'https://fine-plum-crab-ring.cyclic.app'
 const express = require('express')
-const Telegraf = require('telegraf')
+const { Telegraf } = require('telegraf')
 
 const PORT = process.env.PORT || 3000
 
