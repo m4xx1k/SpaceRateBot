@@ -1,7 +1,7 @@
 const Telegraf = require('telegraf')
 
 const BOT_TOKEN = '6143502881:AAEQmvcZkDavYqOjfvvjXl7tpWLskmI7OEc'
-const URL = ''
+const URL = 'https://fine-plum-crab-ring.cyclic.app'
 const PORT = process.env.PORT || 3000
 
 const bot = new Telegraf(BOT_TOKEN)
