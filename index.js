@@ -12,7 +12,6 @@ const bot = new TelegramBot(TOKEN, {
         port: port
     }
 });
-bot.setWebHook(`${url}/bot${TOKEN}`);
 
 const app = express();
 app.use(bodyParser.json());
@@ -22,25 +21,34 @@ app.post(`/bot${TOKEN}`, (req, res) => {
     res.sendStatus(200);
 });
 
-bot.onText(/\/start/, (msg) => {
+bot.onText(/\/start/, async (msg) => {
     const chatId = msg.chat.id;
-    bot.sendMessage(chatId, 'Hello, Welcome to my bot!');
+    await bot.sendMessage(chatId, 'Hello, Welcome to my bot!');
 });
 
-bot.onText(/\/help/, (msg) => {
+bot.onText(/\/help/, async (msg) => {
     const chatId = msg.chat.id;
-    bot.sendMessage(chatId, 'This is a help message');
+    await bot.sendMessage(chatId, 'This is a help message');
 });
 
 // Deep linking
-bot.onText(/\/start (\w+)/, (msg, match) => {
+bot.onText(/\/start (\w+)/, async (msg, match) => {
     const chatId = msg.chat.id;
     const deepLinkId = match[1]; // the captured "whatever"
 
     // Use deepLinkId to decide what to do
-    bot.sendMessage(chatId, `Deep link clicked with ID: ${deepLinkId}`);
+    await bot.sendMessage(chatId, `Deep link clicked with ID: ${deepLinkId}`);
 });
 
-app.listen(port, () => {
-    console.log(`Express server is listening on ${port}`);
-});
+const startBot = async () => {
+    try {
+        await bot.setWebHook(`${url}/bot${TOKEN}`);
+        app.listen(port, () => {
+            console.log(`Express server is listening on ${port}`);
+        });
+    } catch (error) {
+        console.log(error);
+    }
+};
+
+startBot();
