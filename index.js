@@ -39,13 +39,19 @@ bot.onText(/\/start (\w+)/, async (msg, match) => {
     // Use deepLinkId to decide what to do
     await bot.sendMessage(chatId, `Deep link clicked with ID: ${deepLinkId}`);
 });
+console.log(0)
 
 const startBot = async () => {
+    console.log(1)
     try {
+        console.log(2)
+
         await bot.setWebHook(`${url}/bot${TOKEN}`);
         app.listen(port, () => {
             console.log(`Express server is listening on ${port}`);
         });
+        console.log(3)
+
     } catch (error) {
         console.log(error);
     }
