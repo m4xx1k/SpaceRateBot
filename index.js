@@ -5,11 +5,11 @@ const bodyParser = require('body-parser');
 const TOKEN = '6143502881:AAEQmvcZkDavYqOjfvvjXl7tpWLskmI7OEc'
 const url = 'https://srbot.onrender.com'
 
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 6562;
 
 const bot = new TelegramBot(TOKEN, {
     webHook: {
-        port: port
+        port
     }
 });
 
