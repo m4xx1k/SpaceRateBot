@@ -2,7 +2,7 @@
 const TelegramBot = require('node-telegram-bot-api');
 const express = require('express');
 const bodyParser = require('body-parser');
-const {Markup} = require("telegraf");
+const {keyboard} = require("telegraf/src/markup");
 const TOKEN = '6143502881:AAEQmvcZkDavYqOjfvvjXl7tpWLskmI7OEc'
 const url = 'https://fine-plum-crab-ring.cyclic.app'
 const webappurl = 'https://olive-iguana-tie.cyclic.app'
@@ -24,7 +24,13 @@ app.post(`/bot${TOKEN}`, (req, res) => {
 
 bot.onText(/\/start/, async (msg) => {
     const chatId = msg.chat.id;
-    await bot.sendMessage(chatId, 'Hello, Welcome to my bot!');
+
+    await bot.sendMessage(chatId, 'Hello, Welcome to my bot!', {
+        reply_markup: {keyboard:[
+            [{text:'go',web_app:{url:webappurl}}]
+    ]},
+    });
+
 });
 
 bot.onText(/\/help/, async (msg) => {
@@ -40,17 +46,7 @@ bot.onText(/\/start (\w+)/, async (msg, match) => {
     // Use deepLinkId to decide what to do
     await bot.sendMessage(chatId, `Deep link clicked with ID: ${deepLinkId}`);
 });
-bot.command('site',ctx=>{
-    return ctx.reply(
-        "open webapp",
-        Markup.inlineKeyboard([
-            Markup.button.webApp(
-                "Open",
-                webappurl
-            ),
-        ])
-    );
-})
+
 const startBot = async () => {
     try {
 
