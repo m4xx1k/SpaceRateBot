@@ -2,9 +2,10 @@
 const TelegramBot = require('node-telegram-bot-api');
 const express = require('express');
 const bodyParser = require('body-parser');
+const {Markup} = require("telegraf");
 const TOKEN = '6143502881:AAEQmvcZkDavYqOjfvvjXl7tpWLskmI7OEc'
 const url = 'https://fine-plum-crab-ring.cyclic.app'
-
+const webappurl = 'https://olive-iguana-tie.cyclic.app'
 const port = process.env.PORT || 6562;
 
 const bot = new TelegramBot(TOKEN, {
@@ -39,12 +40,19 @@ bot.onText(/\/start (\w+)/, async (msg, match) => {
     // Use deepLinkId to decide what to do
     await bot.sendMessage(chatId, `Deep link clicked with ID: ${deepLinkId}`);
 });
-console.log(0)
-
+bot.command('site',ctx=>{
+    return ctx.reply(
+        "open webapp",
+        Markup.inlineKeyboard([
+            Markup.button.webApp(
+                "Open",
+                webappurl
+            ),
+        ])
+    );
+})
 const startBot = async () => {
-    console.log(1)
     try {
-        console.log(2)
 
         await bot.setWebHook(`${url}/bot${TOKEN}`);
         app.listen(port, () => {
@@ -57,4 +65,6 @@ const startBot = async () => {
     }
 };
 
-startBot();
+startBot();// Enable graceful stop
+process.once('SIGINT', () => bot.stop('SIGINT'));
+process.once('SIGTERM', () => bot.stop('SIGTERM'));
