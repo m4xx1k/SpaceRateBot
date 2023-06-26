@@ -9,9 +9,7 @@ const webappurl = 'https://olive-iguana-tie.cyclic.app'
 const port = process.env.PORT || 6562;
 
 const bot = new TelegramBot(TOKEN, {
-    webHook: {
-        port
-    }
+
 });
 
 const app = express();
