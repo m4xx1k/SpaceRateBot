@@ -19,9 +19,8 @@ const app = express();
 app.use(express.json())
 
 
-
 app.use(cors({
-    origin: ['http://localhost:5173','https://gilded-longma-21e97b.netlify.app','https://olive-iguana-tie.cyclic.app','https://cautious-pumps-toad.cyclic.app']
+    origin: ['http://localhost:5173', 'https://gilded-longma-21e97b.netlify.app', 'https://olive-iguana-tie.cyclic.app', 'https://cautious-pumps-toad.cyclic.app']
 }))
 
 app.post(`/bot${TOKEN}`, (req, res) => {
@@ -34,9 +33,12 @@ app.get('/photo/:id', (req, res) => {
         const user_profile = bot.getUserProfilePhotos(id);
         user_profile.then(function (res1) {
             const file_id = res1.photos[0][0].file_id;
+            console.log(file_id)
             const file = bot.getFile(file_id);
+
             file.then(function (result) {
                 const file_path = result.file_path;
+                console.log(file_path)
                 const photo_url = `https://api.telegram.org/file/bot${TOKEN}/${file_path}`
                 res.status(200).json(photo_url)
             });
