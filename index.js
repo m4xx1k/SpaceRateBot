@@ -1,16 +1,14 @@
+require('dotenv').config()
 const TelegramBot = require('node-telegram-bot-api');
 const express = require('express');
-const bodyParser = require('body-parser');
 const cors = require('cors')
 
 const TOKEN = '6143502881:AAEQmvcZkDavYqOjfvvjXl7tpWLskmI7OEc'
 const url = 'https://fine-plum-crab-ring.cyclic.app'
 const webappurl = 'https://olive-iguana-tie.cyclic.app'
-const port = process.env.PORT || 6562;
+const port = process.env.PORT || 8080;
 
-const bot = new TelegramBot(TOKEN, {
-
-});
+const bot = new TelegramBot(TOKEN);
 
 const app = express();
 
@@ -21,18 +19,18 @@ app.use(cors({
     origin: ['http://localhost:5173', 'https://gilded-longma-21e97b.netlify.app', 'https://olive-iguana-tie.cyclic.app', 'https://cautious-pumps-toad.cyclic.app']
 }))
 
-app.post(`/bot${TOKEN}`, (req, res) => {
-    bot.processUpdate(req.body);
-    res.sendStatus(200);
-});
+
 app.get('/photo/:id', (req, res) => {
     try {
+        console.log(1)
         const {id} = req.params
         const user_profile = bot.getUserProfilePhotos(id);
         user_profile.then(function (res1) {
             const file_id = res1.photos[0][0].file_id;
             console.log(file_id)
             const file = bot.getFile(file_id);
+            console.log(file)
+            // res.status(200).json(file)
 
             file.then(function (result) {
                 const file_path = result.file_path;
@@ -75,33 +73,9 @@ bot.onText(/\/help/, async (msg) => {
 //         });
 //     });
 // });
-// Deep linking
-// bot.onText(/\/start (\w+)/, async (msg, match) => {
-//     const chatId = msg.chat.id;
-//     const deepLinkId = match[1]; // the captured "whatever"
-//
-//     // Use deepLinkId to decide what to do
-//     await bot.sendMessage(chatId, `Deep link clicked with ID: ${deepLinkId}`);
-// });
 
-// const startBot = async () => {
-//     try {
-//
-//         await bot.setWebHook(`${url}/bot${TOKEN}`);
-//         app.listen(port, () => {
-//             console.log(`Express server is listening on ${port}`);
-//         });
-//         console.log(3)
-//
-//     } catch (error) {
-//         console.log(error);
-//     }
-// };
 bot.startPolling().then(() => {
     console.log('bot started')
-    app.listen(port, () => console.log(`Server started ${port}`))
-
 }).catch(e => console.log(e))
-// // startBot();// Enable graceful stop
-// process.once('SIGINT', () => bot.stop('SIGINT'));
-// process.once('SIGTERM', () => bot.stop('SIGTERM'));
+app.listen(port, () => console.log(`Server started ${port}`))
+
