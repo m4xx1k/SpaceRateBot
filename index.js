@@ -16,7 +16,7 @@ app.use(express.json())
 
 
 app.use(cors({
-    origin: ['http://localhost:5173', 'https://gilded-longma-21e97b.netlify.app', 'https://olive-iguana-tie.cyclic.app', 'https://cautious-pumps-toad.cyclic.app']
+    origin: ['http://localhost:5173','https://spacerateserver-production.up.railway.app/', 'https://gilded-longma-21e97b.netlify.app', 'https://olive-iguana-tie.cyclic.app', 'https://cautious-pumps-toad.cyclic.app']
 }))
 
 
