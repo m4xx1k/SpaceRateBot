@@ -2,10 +2,16 @@ require('dotenv').config()
 const TelegramBot = require('node-telegram-bot-api');
 const express = require('express');
 const cors = require('cors')
+const axios = require('axios')
+const crypto = require('crypto')
+const path = require('path');
+const fs = require('fs');
+
 
 const TOKEN = '6143502881:AAEQmvcZkDavYqOjfvvjXl7tpWLskmI7OEc'
-const url = 'https://fine-plum-crab-ring.cyclic.app'
-const webappurl = 'https://olive-iguana-tie.cyclic.app'
+const url = 'https://goodjoy.uz'
+const webappurl = 'https://goodjoy.uz'
+const BOT_URL = 'https://bot.goodjoy.uz'
 const port = process.env.PORT || 8080;
 
 const bot = new TelegramBot(TOKEN);
@@ -16,40 +22,55 @@ app.use(express.json())
 
 
 app.use(cors({
-    origin: ['http://localhost:5173','https://spacerateserver-production.up.railway.app/', 'https://gilded-longma-21e97b.netlify.app', 'https://olive-iguana-tie.cyclic.app', 'https://cautious-pumps-toad.cyclic.app']
+    origin: ['http://localhost:5173', 'https://api.goodjoy.uz', 'https://goodjoy.uz']
 }))
 
 
-app.get('/photo/:id', (req, res) => {
+app.get('/photo/:id', async (req, res) => {
     try {
-        console.log(1)
         const {id} = req.params
-        const user_profile = bot.getUserProfilePhotos(id);
-        user_profile.then(function (res1) {
-            const file_id = res1.photos[0][0].file_id;
-            console.log(file_id)
-            const file = bot.getFile(file_id);
-            console.log(file)
-            // res.status(200).json(file)
+        const user_profile = await bot.getUserProfilePhotos(id);
+        const file_id = user_profile.photos[0][0].file_id;
+        const file = await bot.getFile(file_id);
+        const file_path = file.file_path;
+        const photo_url = `https://api.telegram.org/file/bot${TOKEN}/${file_path}`;
+        // Скачуємо файл
+        const response = await axios({
+            method: 'GET',
+            url: photo_url,
+            responseType: 'stream',
+        });
 
-            file.then(function (result) {
-                const file_path = result.file_path;
-                console.log(file_path)
-                const photo_url = `https://api.telegram.org/file/bot${TOKEN}/${file_path}`
-                res.status(200).json(photo_url)
-            });
+        // Генеруємо випадкове ім'я файлу
+        const fileName = `${crypto.randomBytes(16).toString('hex')}.${file_path.split('.').slice(-1)}`
+
+        const localFilePath = path.join(__dirname, 'files', 'users', fileName);
+
+        const writer = fs.createWriteStream(localFilePath);
+        response.data.pipe(writer);
+
+        writer.on('finish', () => {
+            res.status(200).json({filePath: `${BOT_URL}/files/${fileName}`});
+        });
+        writer.on('error', (error) => {
+            res.status(500).json({error: 'An error occurred while writing file.', details: error.message});
         });
     } catch (e) {
-        res.status(500).json({error: JSON.stringify(e)})
+        res.status(500).json({error: e.toString()});
     }
 })
+
+// ... ваш код
+
+app.use('/files', express.static(path.join(__dirname, 'files', 'users')));
+
 bot.onText(/\/start/, async (msg) => {
     const chatId = msg.chat.id;
 
-    await bot.sendMessage(chatId, 'Hello, Welcome to my bot!', {
+    await bot.sendMessage(chatId, 'Привествуем в боте GOODJOY!', {
         reply_markup: {
-            keyboard: [
-                [{text: 'go', web_app: {url: webappurl}}]
+            inline_keyboard: [
+                [{text: 'Войти в приложение', web_app: {url: webappurl}}]
             ]
         },
     });
