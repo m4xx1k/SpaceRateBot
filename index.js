@@ -43,14 +43,12 @@ app.get('/photo/:id', async (req, res) => {
 
         // Генеруємо випадкове ім'я файлу
         const fileName = `${crypto.randomBytes(16).toString('hex')}.${file_path.split('.').slice(-1)}`
-
         const localFilePath = path.join(__dirname, 'files', 'users', fileName);
-
         const writer = fs.createWriteStream(localFilePath);
         response.data.pipe(writer);
 
         writer.on('finish', () => {
-            res.status(200).json({filePath: `${BOT_URL}/files/${fileName}`});
+            res.status(200).json(`${BOT_URL}/files/${fileName}`);
         });
         writer.on('error', (error) => {
             res.status(500).json({error: 'An error occurred while writing file.', details: error.message});
