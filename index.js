@@ -8,7 +8,7 @@ const path = require('path');
 const fs = require('fs');
 
 
-const TOKEN = '6143502881:AAEQmvcZkDavYqOjfvvjXl7tpWLskmI7OEc'
+const TOKEN = '5735997728:AAFxneymHGk9ah-bLIhzo2yVlDG6v5NEoA8'
 const url = 'https://goodjoy.uz'
 const webappurl = 'https://goodjoy.uz'
 const BOT_URL = 'https://bot.goodjoy.uz'
