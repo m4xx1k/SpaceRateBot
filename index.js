@@ -44,8 +44,9 @@ bot.onText(/\/start/, async (msg) => {
     const telegramId = msg.from.id;
     try {
         const isUserInDatabase = await UserStarted.find({telegramId,chatId})
-        console.log(!isUserInDatabase)
-        if(!isUserInDatabase){
+        console.log(isUserInDatabase)
+        console.log(!isUserInDatabase?.length)
+        if(!isUserInDatabase?.length){
             console.log('create')
             await UserStarted.create({ chatId, telegramId });
         }
