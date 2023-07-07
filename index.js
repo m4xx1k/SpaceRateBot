@@ -23,7 +23,7 @@ app.use(express.json())
 
 
 app.use(cors({
-    origin: ['http://localhost:5173', 'https://api.goodjoy.uz', 'https://goodjoy.uz']
+    origin: ['http://localhost:5173', 'https://api.goodjoy.uz',  'https://admin.goodjoy.uz', 'https://goodjoy.uz']
 }))
 
 
@@ -39,11 +39,14 @@ app.use(express.json());
 
 // записуємо ID чату та ID користувача в базу даних, коли користувач натискає /start
 bot.onText(/\/start/, async (msg) => {
+    console.log('start')
     const chatId = msg.chat.id;
     const telegramId = msg.from.id;
     try {
         const isUserInDatabase = await UserStarted.find({telegramId,chatId})
+        console.log(!isUserInDatabase)
         if(!isUserInDatabase){
+            console.log('create')
             await UserStarted.create({ chatId, telegramId });
         }
         await bot.sendMessage(chatId, 'Привествуем в боте GOODJOY!', {
