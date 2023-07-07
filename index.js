@@ -42,7 +42,10 @@ bot.onText(/\/start/, async (msg) => {
     const chatId = msg.chat.id;
     const telegramId = msg.from.id;
     try {
-        await UserStarted.create({ chatId, telegramId });
+        const isUserInDatabase = await UserStarted.find({telegramId,chatId})
+        if(!isUserInDatabase){
+            await UserStarted.create({ chatId, telegramId });
+        }
         await bot.sendMessage(chatId, 'Привествуем в боте GOODJOY!', {
             reply_markup: {
                 inline_keyboard: [
