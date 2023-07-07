@@ -93,6 +93,7 @@ app.post('/broadcast', upload.array('file'), async (req, res) => {
                             media: filePath // замість об'єкту використайте шлях до файлу як рядок
                         }
                         if(i===0) data.caption = text
+
                         photoAlbum.push(data);
                     } else if(fileType === '.mp4') {
                         // відправлення відео
@@ -107,7 +108,7 @@ app.post('/broadcast', upload.array('file'), async (req, res) => {
                 if (photoAlbum.length > 1) {
                     await bot.sendMediaGroup(userStarted.chatId, photoAlbum);
                 } else if (photoAlbum.length === 1) {
-                    await bot.sendPhoto(userStarted.chatId, photoAlbum[0].media);
+                    await bot.sendPhoto(userStarted.chatId, photoAlbum[0].media,{caption:text});
                 }
 
                 console.log('sent')
