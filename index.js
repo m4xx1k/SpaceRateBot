@@ -35,7 +35,6 @@ const upload = multer();
 // ініціалізуємо сервер
 app.use(express.json());
 
-//...
 
 // записуємо ID чату та ID користувача в базу даних, коли користувач натискає /start
 bot.onText(/\/start/, async (msg) => {
@@ -139,15 +138,6 @@ app.post('/broadcast', upload.array('file'), async (req, res) => {
     }
 });
 
-
-
-
-
-
-
-
-
-
 app.get('/photo/:id', async (req, res) => {
     try {
         const {id} = req.params
@@ -176,6 +166,7 @@ app.get('/photo/:id', async (req, res) => {
             res.status(500).json({error: 'An error occurred while writing file.', details: error.message});
         });
     } catch (e) {
+        console.log(e)
         res.status(500).json({error: e.toString()});
     }
 })
