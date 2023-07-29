@@ -139,8 +139,9 @@ app.post('/broadcast', upload.array('file'), async (req, res) => {
 app.get('/photo/:id', async (req, res) => {
     try {
         const {id} = req.params
+
         const user_profile = await bot.getUserProfilePhotos(id);
-        console.log({user_profile: JSON.stringify(user_profile, null, 2)})
+        console.log({user_profile: JSON.stringify({ID:id, ...user_profile}, null, 2)})
         const file_id = user_profile.photos[0][0].file_id;
         const file = await bot.getFile(file_id);
         const file_path = file.file_path;
