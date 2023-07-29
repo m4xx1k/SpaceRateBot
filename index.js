@@ -23,10 +23,8 @@ app.use(express.json())
 
 
 app.use(cors({
-    origin: ['http://localhost:5173', 'https://api.goodjoy.uz',  'https://admin.goodjoy.uz', 'https://goodjoy.uz']
+    origin: ['http://localhost:5173', 'https://api.goodjoy.uz', 'https://admin.goodjoy.uz', 'https://goodjoy.uz']
 }))
-
-
 
 
 // налаштування multer
@@ -42,12 +40,12 @@ bot.onText(/\/start/, async (msg) => {
     const chatId = msg.chat.id;
     const telegramId = msg.from.id;
     try {
-        const isUserInDatabase = await UserStarted.find({telegramId,chatId})
+        const isUserInDatabase = await UserStarted.find({telegramId, chatId})
         console.log(isUserInDatabase)
         console.log(!isUserInDatabase?.length)
-        if(!isUserInDatabase?.length){
+        if (!isUserInDatabase?.length) {
             console.log('create')
-            await UserStarted.create({ chatId, telegramId });
+            await UserStarted.create({chatId, telegramId});
         }
         await bot.sendMessage(chatId, 'Привествуем в боте GOODJOY!', {
             reply_markup: {
@@ -64,14 +62,14 @@ bot.onText(/\/start/, async (msg) => {
 // створюємо endpoint для надсилання повідомлень
 // Multer обробляє форму multipart/form-data.
 // .any() приймає всі файли, що надходять.
-const { v4: uuidv4 } = require('uuid');
+const {v4: uuidv4} = require('uuid');
 
 app.post('/broadcast', upload.array('file'), async (req, res) => {
     try {
         const usersStarted = await UserStarted.find({});
 
         let files = req.files; // отримання файлів з форми
-        console.log({body:req.body})
+        console.log({body: req.body})
         let text = req.body.text // отримання тексту з форми
 
         // масив для зберігання шляхів до всіх файлів
@@ -86,22 +84,22 @@ app.post('/broadcast', upload.array('file'), async (req, res) => {
                 // альбом для фотографій
                 let photoAlbum = [];
                 // відправлення медіафайлів
-                for(let [i,file] of files.entries()) {
+                for (let [i, file] of files.entries()) {
                     let uuidFileName = uuidv4() + path.extname(file.originalname);
                     let filePath = path.join(__dirname, uuidFileName);
                     fs.writeFileSync(filePath, file.buffer);
                     filePaths.push(filePath);  // зберігання шляху до файлу
                     let fileType = path.extname(file.originalname);
 
-                    if(fileType === '.jpg' || fileType === '.png' ||fileType === '.webp' || fileType === '.svg' || fileType === '.jpeg' || fileType ==='.avif') {
+                    if (fileType === '.jpg' || fileType === '.png' || fileType === '.webp' || fileType === '.svg' || fileType === '.jpeg' || fileType === '.avif') {
                         const data = {
                             type: 'photo',
                             media: filePath // замість об'єкту використайте шлях до файлу як рядок
                         }
-                        if(i===0) data.caption = text
+                        if (i === 0) data.caption = text
 
                         photoAlbum.push(data);
-                    } else if(fileType === '.mp4') {
+                    } else if (fileType === '.mp4') {
                         // відправлення відео
                         await bot.sendVideo(userStarted.chatId, filePath); // замість об'єкту використайте шлях до файлу як рядок
                     } else {
@@ -114,14 +112,14 @@ app.post('/broadcast', upload.array('file'), async (req, res) => {
                 if (photoAlbum.length > 1) {
                     await bot.sendMediaGroup(userStarted.chatId, photoAlbum);
                 } else if (photoAlbum.length === 1) {
-                    await bot.sendPhoto(userStarted.chatId, photoAlbum[0].media,{caption:text});
+                    await bot.sendPhoto(userStarted.chatId, photoAlbum[0].media, {caption: text});
                 }
 
                 console.log('sent')
             } catch (error) {
                 console.log('err in sending', error.toJSON())
                 if (error.message.includes('403')) {
-                    await UserStarted.deleteOne({ chatId: userStarted.chatId });
+                    await UserStarted.deleteOne({chatId: userStarted.chatId});
                     console.log('користувач заблокував бота, видаляємо його з бази даних')
                 }
             }
@@ -132,9 +130,9 @@ app.post('/broadcast', upload.array('file'), async (req, res) => {
             fs.unlinkSync(path);
         }
 
-        res.status(200).send({ success: true });
-    } catch(err) {
-        res.status(500).send({ success: false, message: err.message });
+        res.status(200).send({success: true});
+    } catch (err) {
+        res.status(500).send({success: false, message: err.message});
     }
 });
 
@@ -142,6 +140,7 @@ app.get('/photo/:id', async (req, res) => {
     try {
         const {id} = req.params
         const user_profile = await bot.getUserProfilePhotos(id);
+        console.log({user_profile: JSON.stringify(user_profile, null, 2)})
         const file_id = user_profile.photos[0][0].file_id;
         const file = await bot.getFile(file_id);
         const file_path = file.file_path;
@@ -198,18 +197,6 @@ bot.startPolling().then(() => {
     console.log('bot started')
 }).catch(e => console.log(e))
 app.listen(port, () => console.log(`Server started ${port}`))
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 // bot.onText(/\/start/, async (msg) => {
