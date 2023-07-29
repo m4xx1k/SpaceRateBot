@@ -13,7 +13,7 @@ const TOKEN = '5735997728:AAFxneymHGk9ah-bLIhzo2yVlDG6v5NEoA8'
 const url = 'https://goodjoy.uz'
 const webappurl = 'https://goodjoy.uz'
 const BOT_URL = 'https://bot.goodjoy.uz'
-const port = process.env.PORT || 8080;
+const port = process.env.PORT || 5001;
 
 const bot = new TelegramBot(TOKEN);
 
