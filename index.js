@@ -194,9 +194,9 @@ bot.onText(/\/help/, async (msg) => {
 //     });
 // });
 
-bot.startPolling().then(() => {
-    console.log('bot started')
-}).catch(e => console.log(e))
+// bot.startPolling().then(() => {
+//     console.log('bot started')
+// }).catch(e => console.log(e))
 app.listen(port, () => console.log(`Server started ${port}`))
 
 
