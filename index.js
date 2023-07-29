@@ -15,7 +15,7 @@ const webappurl = 'https://goodjoy.uz'
 const BOT_URL = 'https://bot.goodjoy.uz'
 const port = process.env.PORT || 5001;
 
-const bot = new TelegramBot(TOKEN);
+const bot = new TelegramBot(TOKEN,{polling:true});
 
 const app = express();
 
