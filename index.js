@@ -140,7 +140,7 @@ app.get('/photo/:id', async (req, res) => {
     try {
         const {id} = req.params
 
-        const user_profile = await bot.getUserProfilePhotos(id);
+        const user_profile = await bot.getUserProfilePhotos(Number(id));
         console.log({user_profile: JSON.stringify({ID:id, ...user_profile}, null, 2)})
         const file_id = user_profile.photos[0][0].file_id;
         const file = await bot.getFile(file_id);
