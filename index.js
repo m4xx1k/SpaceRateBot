@@ -9,18 +9,25 @@ const fs = require('fs');
 const UserStarted = require('./models/UserStarted.model');
 require('./db');
 const multer = require('multer');
+// const TOKEN = '6143502881:AAHGN6QLLfrEEjsrIGerpRJExZMeixPfqFI'
 const TOKEN = '5735997728:AAFxneymHGk9ah-bLIhzo2yVlDG6v5NEoA8'
 const url = 'https://goodjoy.uz'
 const webappurl = 'https://goodjoy.uz'
 const BOT_URL = 'https://bot.goodjoy.uz'
 const port = process.env.PORT || 5001;
 
-const bot = new TelegramBot(TOKEN,{polling:true});
+const bot = new TelegramBot(TOKEN);
+bot.setWebHook(`${url}/bot${TOKEN}`);
 
 const app = express();
 
 app.use(express.json())
 
+// We are receiving updates at the route below!
+app.post(`/bot${TOKEN}`, (req, res) => {
+    bot.processUpdate(req.body);
+    res.sendStatus(200);
+});
 
 app.use(cors({
     origin: ['http://localhost:5173', 'https://api.goodjoy.uz', 'https://admin.goodjoy.uz', 'https://goodjoy.uz']
