@@ -17,7 +17,7 @@ const BOT_URL = 'https://bot.goodjoy.uz'
 const port = process.env.PORT || 5001;
 
 const bot = new TelegramBot(TOKEN);
-bot.setWebHook(`${url}/bot${TOKEN}`);
+bot.setWebHook(`${BOT_URL}/bot${TOKEN}`);
 
 const app = express();
 
