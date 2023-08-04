@@ -16,18 +16,12 @@ const webappurl = 'https://goodjoy.uz'
 const BOT_URL = 'https://bot.goodjoy.uz'
 const port = process.env.PORT || 5001;
 
-const bot = new TelegramBot(TOKEN);
-bot.setWebHook(`${BOT_URL}/bot${TOKEN}`);
+const bot = new TelegramBot(TOKEN,{polling:true});
 
 const app = express();
 
 app.use(express.json())
 
-// We are receiving updates at the route below!
-app.post(`/bot${TOKEN}`, (req, res) => {
-    bot.processUpdate(req.body);
-    res.sendStatus(200);
-});
 
 app.use(cors({
     origin: ['http://localhost:5173', 'https://api.goodjoy.uz', 'https://admin.goodjoy.uz', 'https://goodjoy.uz']
